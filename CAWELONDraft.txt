@@ -1,0 +1,81 @@
+CAWELON dApp Architecture Principles (Provisional)
+
+Positioning
+
+This document describes the pre-deployment architecture for CAWELON.
+It is a provisional, unaudited, and undeployed design.
+No official CAWELON smart contract has been deployed from this repository.
+
+Core CAWELON Information
+
+- Intended network: Ethereum Mainnet
+- Token name: CAWELON (intended)
+- Symbol: Not finalized; constructor parameter
+- Standard: ERC-20
+- Initial supply: 420,000,000,000,000 tokens
+- Decimals: 18
+- Transfer / buy / sell tax: 0%
+- Rewards / reflection: None
+- Additional minting: None
+- Burn: Self-burn only
+- Permit: EIP-2612
+- Owner / administrator / pause / upgrade / proxy: None
+
+Base Architecture
+
+The CAWELON base token is separated from dApp-specific protocol contracts.
+
+1. CAWELON Base Token
+
+- Ethereum Mainnet ERC-20
+- Fixed initial supply
+- 0% transfer / buy / sell tax
+- No rewards or reflection
+- No additional minting
+- Self-burn only
+- EIP-2612 Permit support
+- No owner, administrator, pause, upgrade, or proxy authority
+
+2. dApp Protocol Contracts
+
+- Connect to CAWELON through IERC20
+- Use OpenZeppelin SafeERC20 for token transfers
+- Use IERC20Permit for signature-based approvals when Permit is enabled
+- Place dApp-specific functions, restrictions, and update procedures in this layer
+- Keep 0628DEX and liquidity-management logic separate from the base token
+
+3. Frontend
+
+- Support Ethereum Mainnet-compatible wallets
+- Display CAWELON balances
+- Support Permit signatures or standard approvals
+- Interact with the relevant dApp protocol contracts
+- Clearly disclose source code, audit status, and deployment addresses on GitHub
+
+Reasons for Separation
+
+- New dApps can be added without reissuing the CAWELON base token
+- A 0% tax and no-reflection design prevents unexpected balance changes
+- The attack surface of the base token remains small
+- Audit, pause, and upgrade policies can be designed independently for each dApp
+- Standard compatibility with wallets, DEXs, and block explorers is easier to preserve
+
+Items to Confirm Before Deployment
+
+- Final token name and symbol
+- Wallet receiving the initial supply
+- Whether any fixed restrictions belong in the base token or the dApp layer
+- Whether ERC20Votes is required for on-chain voting or delegation
+- Automated testing and testnet validation procedures
+- Independent security audit procedures
+- Official deployment address publication
+
+Not Adopted in the Base Token
+
+- dApp-specific logic embedded in the token contract
+- Transfer, buy, or sell taxes
+- Automatic holder rewards
+- Reflection
+- DEX-pair detection
+- Automatic distribution to a marketing wallet
+- Post-deployment minting
